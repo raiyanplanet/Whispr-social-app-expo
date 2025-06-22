@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base theme styles */
+@layer base {
+  /* Light mode styles */
+  .light {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --border-color: #e5e7eb;
+    --accent-color: #3b82f6;
+  }
+
+  /* Dark mode styles */
+  .dark {
+    --bg-primary: #111827;
+    --bg-secondary: #1f2937;
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --border-color: #374151;
+    --accent-color: #3b82f6;
+  }
+
+  /* Ensure text is always visible */
+  * {
+    color: var(--text-primary);
+  }
+
+  /* Override any conflicting text colors */
+  .text-black {
+    color: var(--text-primary) !important;
+  }
+
+  .text-white {
+    color: var(--text-primary) !important;
+  }
+
+  .text-gray-900 {
+    color: var(--text-primary) !important;
+  }
+
+  .text-gray-700 {
+    color: var(--text-secondary) !important;
+  }
+
+  .text-gray-500 {
+    color: var(--text-secondary) !important;
+  }
+
+  /* Background colors */
+  .bg-white {
+    background-color: var(--bg-primary) !important;
+  }
+
+  .bg-gray-50 {
+    background-color: var(--bg-secondary) !important;
+  }
+
+  .bg-gray-100 {
+    background-color: var(--bg-secondary) !important;
+  }
+
+  /* Border colors */
+  .border-gray-200 {
+    border-color: var(--border-color) !important;
+  }
+
+  .border-gray-300 {
+    border-color: var(--border-color) !important;
+  }
+}
+
+/* Custom utility classes */
+@layer utilities {
+  .text-theme-primary {
+    color: var(--text-primary);
+  }
+
+  .text-theme-secondary {
+    color: var(--text-secondary);
+  }
+
+  .bg-theme-primary {
+    background-color: var(--bg-primary);
+  }
+
+  .bg-theme-secondary {
+    background-color: var(--bg-secondary);
+  }
+
+  .border-theme {
+    border-color: var(--border-color);
+  }
+}
