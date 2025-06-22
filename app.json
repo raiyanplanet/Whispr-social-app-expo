@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "social-app",
-    "slug": "social-app",
+    "name": "Whispr",
+    "slug": "whispr",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -37,6 +37,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "8d5dbcb2-aa60-4404-9073-3df978a409a2"
+      }
+    },
+    "owner": "raiyan2002"
   }
 }

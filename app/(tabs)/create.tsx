@@ -8,7 +8,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { createPost, getCurrentUserProfile } from "../../lib/supabase";
@@ -37,12 +37,12 @@ export default function CreatePostScreen() {
     try {
       const { data, error } = await getCurrentUserProfile();
       if (error) {
-        console.error('Error loading current user:', error);
+        console.error("Error loading current user:", error);
       } else {
         setCurrentUser(data);
       }
     } catch (error) {
-      console.error('Error loading current user:', error);
+      console.error("Error loading current user:", error);
     }
   };
 
@@ -63,7 +63,7 @@ export default function CreatePostScreen() {
     setLoading(true);
     try {
       const { error } = await createPost(content, selectedImage || undefined);
-      
+
       if (error) {
         Alert.alert("Error", error.message);
       } else {
@@ -79,7 +79,11 @@ export default function CreatePostScreen() {
         ]);
       }
     } catch (error) {
-      Alert.alert("Error", "Failed to create post");
+      Alert.alert(
+        "Error",
+        "Failed to create post" +
+          (error instanceof Error ? `: ${error.message}` : "")
+      );
     } finally {
       setLoading(false);
     }
@@ -106,15 +110,13 @@ export default function CreatePostScreen() {
             loading || !content.trim()
               ? "bg-gray-300 dark:bg-gray-600"
               : "bg-blue-500"
-          }`}
-        >
+          }`}>
           <Text
             className={`font-semibold ${
               loading || !content.trim()
                 ? "text-gray-500 dark:text-gray-400"
                 : "text-white"
-            }`}
-          >
+            }`}>
             {loading ? "Posting..." : "Post"}
           </Text>
         </TouchableOpacity>
@@ -125,15 +127,15 @@ export default function CreatePostScreen() {
         <View className="flex-row items-center mb-4">
           <View className="w-10 h-10 bg-blue-500 rounded-full items-center justify-center mr-3">
             <Text className="text-white font-bold text-lg">
-              {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
+              {currentUser?.username?.charAt(0).toUpperCase() || "U"}
             </Text>
           </View>
           <View>
             <Text className="font-semibold text-gray-900 dark:text-white">
-              {currentUser?.full_name || 'Your Name'}
+              {currentUser?.full_name || "Your Name"}
             </Text>
             <Text className="text-gray-500 dark:text-gray-400 text-sm">
-              @{currentUser?.username || 'your_username'}
+              @{currentUser?.username || "your_username"}
             </Text>
           </View>
         </View>
@@ -159,8 +161,7 @@ export default function CreatePostScreen() {
             />
             <TouchableOpacity
               onPress={removeImage}
-              className="absolute top-2 right-2 bg-black bg-opacity-50 rounded-full p-2"
-            >
+              className="absolute top-2 right-2 bg-black bg-opacity-50 rounded-full p-2">
               <Ionicons name="close" size={20} color="white" />
             </TouchableOpacity>
           </View>
@@ -174,8 +175,7 @@ export default function CreatePostScreen() {
           <View className="flex-row space-x-4">
             <TouchableOpacity
               onPress={handleImagePicker}
-              className="flex-row items-center"
-            >
+              className="flex-row items-center">
               <Ionicons name="image" size={24} color="#3b82f6" />
               <Text className="ml-2 text-blue-500 font-medium">Photo</Text>
             </TouchableOpacity>
@@ -192,4 +192,4 @@ export default function CreatePostScreen() {
       </ScrollView>
     </SafeAreaView>
   );
-} 
+}

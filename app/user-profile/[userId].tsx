@@ -1,9 +1,8 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import { Ionicons } from "@expo/vector-icons";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
-  Dimensions,
   FlatList,
   Image,
   Modal,
@@ -11,10 +10,10 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  View
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTheme } from '../../contexts/ThemeContext';
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "../../contexts/ThemeContext";
 import {
   cancelFriendRequest,
   getCurrentUserProfile,
@@ -26,10 +25,8 @@ import {
   sendFriendRequest,
   supabase,
   unfriendUser,
-  unlikePost
-} from '../../lib/supabase';
-
-const { width } = Dimensions.get('window');
+  unlikePost,
+} from "../../lib/supabase";
 
 interface UserProfile {
   id: string;
@@ -64,7 +61,7 @@ export default function UserProfileScreen() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [friends, setFriends] = useState<UserProfile[]>([]);
   const [friendCount, setFriendCount] = useState(0);
-  const [friendStatus, setFriendStatus] = useState<string>('none');
+  const [friendStatus, setFriendStatus] = useState<string>("none");
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
@@ -74,7 +71,7 @@ export default function UserProfileScreen() {
     if (userId) {
       loadProfileData();
     }
-  }, [userId]);
+  });
 
   const loadProfileData = async () => {
     try {
@@ -85,10 +82,10 @@ export default function UserProfileScreen() {
         loadUserPosts(),
         loadFriends(),
         loadFriendCount(),
-        loadFriendStatus()
+        loadFriendStatus(),
       ]);
     } catch (error) {
-      console.error('Error loading profile data:', error);
+      console.error("Error loading profile data:", error);
     } finally {
       setLoading(false);
     }
@@ -97,19 +94,19 @@ export default function UserProfileScreen() {
   const loadUserProfile = async () => {
     try {
       const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
         .single();
 
       if (error) {
-        console.error('Error loading user profile:', error);
-        Alert.alert('Error', 'Failed to load user profile');
+        console.error("Error loading user profile:", error);
+        Alert.alert("Error", "Failed to load user profile");
       } else {
         setProfile(data);
       }
     } catch (error) {
-      console.error('Error in loadUserProfile:', error);
+      console.error("Error in loadUserProfile:", error);
     }
   };
 
@@ -117,12 +114,12 @@ export default function UserProfileScreen() {
     try {
       const { data, error } = await getCurrentUserProfile();
       if (error) {
-        console.error('Error loading current user:', error);
+        console.error("Error loading current user:", error);
       } else {
         setCurrentUser(data);
       }
     } catch (error) {
-      console.error('Error loading current user:', error);
+      console.error("Error loading current user:", error);
     }
   };
 
@@ -130,12 +127,12 @@ export default function UserProfileScreen() {
     try {
       const { data, error } = await getUserPosts(userId!);
       if (error) {
-        console.error('Error loading user posts:', error);
+        console.error("Error loading user posts:", error);
       } else {
         setPosts(data || []);
       }
     } catch (error) {
-      console.error('Error in loadUserPosts:', error);
+      console.error("Error in loadUserPosts:", error);
     }
   };
 
@@ -143,12 +140,12 @@ export default function UserProfileScreen() {
     try {
       const { data, error } = await getFriends(userId!);
       if (error) {
-        console.error('Error loading friends:', error);
+        console.error("Error loading friends:", error);
       } else {
         setFriends(data || []);
       }
     } catch (error) {
-      console.error('Error in loadFriends:', error);
+      console.error("Error in loadFriends:", error);
     }
   };
 
@@ -156,12 +153,12 @@ export default function UserProfileScreen() {
     try {
       const { count, error } = await getFriendCount(userId!);
       if (error) {
-        console.error('Error loading friend count:', error);
+        console.error("Error loading friend count:", error);
       } else {
         setFriendCount(count);
       }
     } catch (error) {
-      console.error('Error in loadFriendCount:', error);
+      console.error("Error in loadFriendCount:", error);
     }
   };
 
@@ -169,12 +166,12 @@ export default function UserProfileScreen() {
     try {
       const { data, error } = await getFriendRequestStatus(userId!);
       if (error) {
-        console.error('Error loading friend status:', error);
+        console.error("Error loading friend status:", error);
       } else {
         setFriendStatus(data);
       }
     } catch (error) {
-      console.error('Error in loadFriendStatus:', error);
+      console.error("Error in loadFriendStatus:", error);
     }
   };
 
@@ -190,54 +187,54 @@ export default function UserProfileScreen() {
     setActionLoading(true);
     try {
       switch (friendStatus) {
-        case 'none':
+        case "none":
           const { error: sendError } = await sendFriendRequest(userId);
           if (sendError) {
-            Alert.alert('Error', 'Failed to send friend request');
+            Alert.alert("Error", "Failed to send friend request");
           } else {
-            setFriendStatus('pending');
-            Alert.alert('Success', 'Friend request sent!');
+            setFriendStatus("pending");
+            Alert.alert("Success", "Friend request sent!");
           }
           break;
 
-        case 'pending':
+        case "pending":
           const { error: cancelError } = await cancelFriendRequest(userId);
           if (cancelError) {
-            Alert.alert('Error', 'Failed to cancel friend request');
+            Alert.alert("Error", "Failed to cancel friend request");
           } else {
-            setFriendStatus('none');
-            Alert.alert('Success', 'Friend request cancelled');
+            setFriendStatus("none");
+            Alert.alert("Success", "Friend request cancelled");
           }
           break;
 
-        case 'accepted':
+        case "accepted":
           Alert.alert(
-            'Unfriend',
+            "Unfriend",
             `Are you sure you want to unfriend ${profile?.full_name || profile?.username}?`,
             [
-              { text: 'Cancel', style: 'cancel' },
+              { text: "Cancel", style: "cancel" },
               {
-                text: 'Unfriend',
-                style: 'destructive',
+                text: "Unfriend",
+                style: "destructive",
                 onPress: async () => {
                   const { error: unfriendError } = await unfriendUser(userId);
                   if (unfriendError) {
-                    Alert.alert('Error', 'Failed to unfriend user');
+                    Alert.alert("Error", "Failed to unfriend user");
                   } else {
-                    setFriendStatus('none');
+                    setFriendStatus("none");
                     await loadFriendCount();
                     await loadFriends();
-                    Alert.alert('Success', 'User unfriended');
+                    Alert.alert("Success", "User unfriended");
                   }
-                }
-              }
+                },
+              },
             ]
           );
           break;
       }
     } catch (error) {
-      console.error('Error in friend action:', error);
-      Alert.alert('Error', 'Something went wrong');
+      console.error("Error in friend action:", error);
+      Alert.alert("Error", "Something went wrong");
     } finally {
       setActionLoading(false);
     }
@@ -250,22 +247,22 @@ export default function UserProfileScreen() {
       } else {
         await likePost(postId);
       }
-      
+
       // Update post in local state
-      setPosts(prevPosts => 
-        prevPosts.map(post => 
-          post.id === postId 
-            ? { 
-                ...post, 
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.id === postId
+            ? {
+                ...post,
                 is_liked: !isLiked,
-                like_count: isLiked ? post.like_count - 1 : post.like_count + 1
+                like_count: isLiked ? post.like_count - 1 : post.like_count + 1,
               }
             : post
         )
       );
     } catch (error) {
-      console.error('Error liking/unliking post:', error);
-      Alert.alert('Error', 'Failed to update like');
+      console.error("Error liking/unliking post:", error);
+      Alert.alert("Error", "Failed to update like");
     }
   };
 
@@ -275,27 +272,28 @@ export default function UserProfileScreen() {
         <TouchableOpacity
           style={{ backgroundColor: colors.border }}
           className="flex-1 py-3 rounded-xl mr-2"
-          onPress={() => router.push('/profile')}
-        >
-          <Text style={{ color: colors.text }} className="text-center font-semibold">
+          onPress={() => router.push("/profile")}>
+          <Text
+            style={{ color: colors.text }}
+            className="text-center font-semibold">
             Edit Profile
           </Text>
         </TouchableOpacity>
       );
     }
 
-    let buttonText = 'Add Friend';
+    let buttonText = "Add Friend";
     let buttonColor = colors.primary;
-    let textColor = 'white';
+    let textColor = "white";
 
     switch (friendStatus) {
-      case 'pending':
-        buttonText = 'Cancel Request';
+      case "pending":
+        buttonText = "Cancel Request";
         buttonColor = colors.border;
         textColor = colors.text;
         break;
-      case 'accepted':
-        buttonText = 'Friends';
+      case "accepted":
+        buttonText = "Friends";
         buttonColor = colors.surface;
         textColor = colors.text;
         break;
@@ -306,22 +304,25 @@ export default function UserProfileScreen() {
         style={{ backgroundColor: buttonColor }}
         className="flex-1 py-3 rounded-xl mr-2"
         onPress={handleFriendAction}
-        disabled={actionLoading}
-      >
-        <Text style={{ color: textColor }} className="text-center font-semibold">
-          {actionLoading ? 'Loading...' : buttonText}
+        disabled={actionLoading}>
+        <Text
+          style={{ color: textColor }}
+          className="text-center font-semibold">
+          {actionLoading ? "Loading..." : buttonText}
         </Text>
       </TouchableOpacity>
     );
   };
 
   const renderPost = ({ item }: { item: Post }) => (
-    <View style={{ backgroundColor: colors.surface }} className="mb-4 rounded-2xl shadow-sm">
+    <View
+      style={{ backgroundColor: colors.surface }}
+      className="mb-4 rounded-2xl shadow-sm">
       {/* Post Header */}
       <View className="flex-row items-center p-4 pb-3">
         <View className="w-10 h-10 bg-blue-500 rounded-full mr-3 flex items-center justify-center">
           <Text className="text-white font-bold">
-            {profile?.username?.charAt(0).toUpperCase() || 'U'}
+            {profile?.username?.charAt(0).toUpperCase() || "U"}
           </Text>
         </View>
         <View className="flex-1">
@@ -345,7 +346,7 @@ export default function UserProfileScreen() {
       {item.image_url && (
         <Image
           source={{ uri: item.image_url }}
-          style={{ width: '100%', height: 200 }}
+          style={{ width: "100%", height: 200 }}
           className="bg-gray-200"
           resizeMode="cover"
         />
@@ -355,28 +356,39 @@ export default function UserProfileScreen() {
       <View className="flex-row items-center justify-between px-4 py-3 border-t border-gray-100">
         <TouchableOpacity
           className="flex-row items-center"
-          onPress={() => handleLikePost(item.id, item.is_liked)}
-        >
+          onPress={() => handleLikePost(item.id, item.is_liked)}>
           <Ionicons
             name={item.is_liked ? "heart" : "heart-outline"}
             size={20}
             color={item.is_liked ? "#ef4444" : colors.textSecondary}
             className="mr-1"
           />
-          <Text style={{ color: colors.textSecondary }} className="text-sm ml-1">
+          <Text
+            style={{ color: colors.textSecondary }}
+            className="text-sm ml-1">
             {item.like_count}
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity className="flex-row items-center">
-          <Ionicons name="chatbubble-outline" size={18} color={colors.textSecondary} />
-          <Text style={{ color: colors.textSecondary }} className="text-sm ml-1">
+          <Ionicons
+            name="chatbubble-outline"
+            size={18}
+            color={colors.textSecondary}
+          />
+          <Text
+            style={{ color: colors.textSecondary }}
+            className="text-sm ml-1">
             {item.comment_count}
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity>
-          <Ionicons name="share-outline" size={18} color={colors.textSecondary} />
+          <Ionicons
+            name="share-outline"
+            size={18}
+            color={colors.textSecondary}
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -385,14 +397,16 @@ export default function UserProfileScreen() {
   const renderFriend = ({ item }: { item: UserProfile }) => (
     <TouchableOpacity
       className="items-center mr-4"
-      onPress={() => router.push(`/user-profile/${item.id}`)}
-    >
+      onPress={() => router.push(`/user-profile/${item.id}`)}>
       <View className="w-16 h-16 bg-blue-500 rounded-full items-center justify-center mb-2">
         <Text className="text-white font-bold text-lg">
-          {item.username?.charAt(0).toUpperCase() || 'U'}
+          {item.username?.charAt(0).toUpperCase() || "U"}
         </Text>
       </View>
-      <Text style={{ color: colors.text }} className="text-xs text-center font-medium" numberOfLines={1}>
+      <Text
+        style={{ color: colors.text }}
+        className="text-xs text-center font-medium"
+        numberOfLines={1}>
         {item.full_name || item.username}
       </Text>
     </TouchableOpacity>
@@ -400,7 +414,9 @@ export default function UserProfileScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={{ backgroundColor: colors.background }} className="flex-1">
+      <SafeAreaView
+        style={{ backgroundColor: colors.background }}
+        className="flex-1">
         <View className="flex-1 items-center justify-center">
           <Text style={{ color: colors.textSecondary }} className="text-base">
             Loading profile...
@@ -412,7 +428,9 @@ export default function UserProfileScreen() {
 
   if (!profile) {
     return (
-      <SafeAreaView style={{ backgroundColor: colors.background }} className="flex-1">
+      <SafeAreaView
+        style={{ backgroundColor: colors.background }}
+        className="flex-1">
         <View className="flex-1 items-center justify-center">
           <Text style={{ color: colors.textSecondary }} className="text-base">
             Profile not found
@@ -420,8 +438,7 @@ export default function UserProfileScreen() {
           <TouchableOpacity
             onPress={() => router.back()}
             className="mt-4 px-6 py-2 rounded-full"
-            style={{ backgroundColor: colors.primary }}
-          >
+            style={{ backgroundColor: colors.primary }}>
             <Text className="text-white font-semibold">Go Back</Text>
           </TouchableOpacity>
         </View>
@@ -430,39 +447,49 @@ export default function UserProfileScreen() {
   }
 
   return (
-    <SafeAreaView style={{ backgroundColor: colors.background }} className="flex-1">
+    <SafeAreaView
+      style={{ backgroundColor: colors.background }}
+      className="flex-1">
       <ScrollView
         className="flex-1"
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      >
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         {/* Profile Header */}
         <View className="px-4 py-6">
           {/* Avatar and Stats */}
           <View className="flex-row items-center mb-4">
             <View className="w-20 h-20 bg-blue-500 rounded-full items-center justify-center mr-4">
               <Text className="text-white font-bold text-2xl">
-                {profile.username?.charAt(0).toUpperCase() || 'U'}
+                {profile.username?.charAt(0).toUpperCase() || "U"}
               </Text>
             </View>
-            
+
             <View className="flex-1 flex-row justify-around">
               <View className="items-center">
-                <Text style={{ color: colors.text }} className="text-xl font-bold">
+                <Text
+                  style={{ color: colors.text }}
+                  className="text-xl font-bold">
                   {posts.length}
                 </Text>
-                <Text style={{ color: colors.textSecondary }} className="text-sm">
+                <Text
+                  style={{ color: colors.textSecondary }}
+                  className="text-sm">
                   Posts
                 </Text>
               </View>
-              
-              <TouchableOpacity 
+
+              <TouchableOpacity
                 className="items-center"
-                onPress={() => setShowFriendsModal(true)}
-              >
-                <Text style={{ color: colors.text }} className="text-xl font-bold">
+                onPress={() => setShowFriendsModal(true)}>
+                <Text
+                  style={{ color: colors.text }}
+                  className="text-xl font-bold">
                   {friendCount}
                 </Text>
-                <Text style={{ color: colors.textSecondary }} className="text-sm">
+                <Text
+                  style={{ color: colors.textSecondary }}
+                  className="text-sm">
                   Friends
                 </Text>
               </TouchableOpacity>
@@ -471,11 +498,15 @@ export default function UserProfileScreen() {
 
           {/* Name and Bio */}
           <View className="mb-4">
-            <Text style={{ color: colors.text }} className="text-lg font-bold mb-1">
+            <Text
+              style={{ color: colors.text }}
+              className="text-lg font-bold mb-1">
               {profile.full_name || profile.username}
             </Text>
             {profile.bio && (
-              <Text style={{ color: colors.text }} className="text-sm leading-5">
+              <Text
+                style={{ color: colors.text }}
+                className="text-sm leading-5">
                 {profile.bio}
               </Text>
             )}
@@ -486,8 +517,7 @@ export default function UserProfileScreen() {
             {renderFriendButton()}
             <TouchableOpacity
               style={{ backgroundColor: colors.border }}
-              className="px-6 py-3 rounded-xl"
-            >
+              className="px-6 py-3 rounded-xl">
               <Text style={{ color: colors.text }} className="font-semibold">
                 Message
               </Text>
@@ -499,11 +529,15 @@ export default function UserProfileScreen() {
         {friends.length > 0 && (
           <View className="mb-4">
             <View className="flex-row items-center justify-between px-4 mb-3">
-              <Text style={{ color: colors.text }} className="text-lg font-semibold">
+              <Text
+                style={{ color: colors.text }}
+                className="text-lg font-semibold">
                 Friends
               </Text>
               <TouchableOpacity onPress={() => setShowFriendsModal(true)}>
-                <Text style={{ color: colors.primary }} className="text-sm font-medium">
+                <Text
+                  style={{ color: colors.primary }}
+                  className="text-sm font-medium">
                   See All
                 </Text>
               </TouchableOpacity>
@@ -521,7 +555,9 @@ export default function UserProfileScreen() {
 
         {/* Posts */}
         <View className="px-4">
-          <Text style={{ color: colors.text }} className="text-lg font-semibold mb-4">
+          <Text
+            style={{ color: colors.text }}
+            className="text-lg font-semibold mb-4">
             Posts
           </Text>
           {posts.length > 0 ? (
@@ -533,8 +569,14 @@ export default function UserProfileScreen() {
             />
           ) : (
             <View className="items-center py-12">
-              <Ionicons name="document-outline" size={48} color={colors.textSecondary} />
-              <Text style={{ color: colors.textSecondary }} className="text-center mt-4">
+              <Ionicons
+                name="document-outline"
+                size={48}
+                color={colors.textSecondary}
+              />
+              <Text
+                style={{ color: colors.textSecondary }}
+                className="text-center mt-4">
                 No posts yet
               </Text>
             </View>
@@ -546,18 +588,23 @@ export default function UserProfileScreen() {
       <Modal
         visible={showFriendsModal}
         animationType="slide"
-        presentationStyle="pageSheet"
-      >
-        <SafeAreaView style={{ backgroundColor: colors.background }} className="flex-1">
-          <View className="flex-row items-center justify-between px-4 py-3 border-b" style={{ borderColor: colors.border }}>
-            <Text style={{ color: colors.text }} className="text-lg font-semibold">
+        presentationStyle="pageSheet">
+        <SafeAreaView
+          style={{ backgroundColor: colors.background }}
+          className="flex-1">
+          <View
+            className="flex-row items-center justify-between px-4 py-3 border-b"
+            style={{ borderColor: colors.border }}>
+            <Text
+              style={{ color: colors.text }}
+              className="text-lg font-semibold">
               Friends ({friendCount})
             </Text>
             <TouchableOpacity onPress={() => setShowFriendsModal(false)}>
               <Ionicons name="close" size={24} color={colors.text} />
             </TouchableOpacity>
           </View>
-          
+
           <FlatList
             data={friends}
             keyExtractor={(item) => item.id}
@@ -569,18 +616,21 @@ export default function UserProfileScreen() {
                 onPress={() => {
                   setShowFriendsModal(false);
                   router.push(`/user-profile/${item.id}`);
-                }}
-              >
+                }}>
                 <View className="w-12 h-12 bg-blue-500 rounded-full mr-3 flex items-center justify-center">
                   <Text className="text-white font-bold text-lg">
-                    {item.username?.charAt(0).toUpperCase() || 'U'}
+                    {item.username?.charAt(0).toUpperCase() || "U"}
                   </Text>
                 </View>
                 <View className="flex-1">
-                  <Text style={{ color: colors.text }} className="font-semibold text-base">
+                  <Text
+                    style={{ color: colors.text }}
+                    className="font-semibold text-base">
                     {item.full_name || item.username}
                   </Text>
-                  <Text style={{ color: colors.textSecondary }} className="text-sm">
+                  <Text
+                    style={{ color: colors.textSecondary }}
+                    className="text-sm">
                     @{item.username}
                   </Text>
                 </View>

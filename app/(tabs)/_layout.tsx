@@ -5,12 +5,12 @@ import { useTheme } from "../../contexts/ThemeContext";
 import { getPendingFriendRequests } from "../../lib/supabase";
 
 export default function TabLayout() {
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
   const [pendingRequestCount, setPendingRequestCount] = useState(0);
 
   useEffect(() => {
     loadPendingRequests();
-    
+
     // Refresh every 30 seconds to check for new requests
     const interval = setInterval(loadPendingRequests, 30000);
     return () => clearInterval(interval);
@@ -21,7 +21,7 @@ export default function TabLayout() {
       const { data } = await getPendingFriendRequests();
       setPendingRequestCount(data?.length || 0);
     } catch (error) {
-      console.error('Error loading pending requests:', error);
+      console.error("Error loading pending requests:", error);
     }
   };
 
@@ -35,8 +35,7 @@ export default function TabLayout() {
           borderTopWidth: 0,
         },
         headerShown: false,
-      }}
-    >
+      }}>
       <Tabs.Screen
         name="index"
         options={{
@@ -71,13 +70,14 @@ export default function TabLayout() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person" size={size} color={color} />
           ),
-          tabBarBadge: pendingRequestCount > 0 ? pendingRequestCount : undefined,
+          tabBarBadge:
+            pendingRequestCount > 0 ? pendingRequestCount : undefined,
           tabBarBadgeStyle: {
             backgroundColor: colors.error,
-            color: '#ffffff',
+            color: "#ffffff",
           },
         }}
       />
     </Tabs>
   );
-} 
+}
