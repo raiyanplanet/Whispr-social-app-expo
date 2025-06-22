@@ -107,7 +107,7 @@ export default function SearchScreen() {
   };
 
   const handleUserPress = (userId: string) => {
-    router.push(`/user-profile?userId=${userId}`);
+    router.push(`/user-profile/${userId}`);
   };
 
   const renderFriend = ({ item }: { item: UserProfile }) => {

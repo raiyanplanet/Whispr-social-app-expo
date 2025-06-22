@@ -45,16 +45,6 @@ function RootLayoutContent() {
             headerShown: false,
           }}
         />
-        <Stack.Screen
-          name="user-profile"
-          options={{
-            title: "Profile",
-            headerStyle: {
-              backgroundColor: colors.surface,
-            },
-            headerTintColor: colors.text,
-          }}
-        />
       </Stack>
     </>
   );

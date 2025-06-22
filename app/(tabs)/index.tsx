@@ -414,7 +414,7 @@ export default function FeedScreen() {
       <View className="flex-row items-center justify-between p-4">
         <TouchableOpacity 
           className="flex-row items-center flex-1"
-          onPress={() => router.push(`/user-profile?userId=${item.user_id}`)}
+          onPress={() => router.push(`/user-profile/${item.user_id}`)}
         >
           <View className="w-12 h-12 bg-blue-500 rounded-full mr-3 flex items-center justify-center shadow-sm">
             <Text className="text-white font-bold text-lg">
@@ -444,7 +444,7 @@ export default function FeedScreen() {
       </View>
       
       {/* Post Content */}
-      <View className="px-4 pb-4">
+      <View className="px-4 pb-4 border-b mb-2 border-gray-400">
         <Text style={{ color: colors.text }} className="text-base leading-6">
           {item.content}
         </Text>
@@ -529,7 +529,7 @@ export default function FeedScreen() {
                 <TouchableOpacity
                   className="flex-row items-center p-4"
                   onPress={() => {
-                    router.push(`/user-profile?userId=${item.id}`);
+                    router.push(`/user-profile/${item.id}`);
                     setShowSearchResults(false);
                     setSearchQuery('');
                   }}
@@ -755,7 +755,7 @@ export default function FeedScreen() {
               <TouchableOpacity
                 className="flex-row items-center p-4"
                 onPress={() => {
-                  router.push(`/user-profile?userId=${item.id}`);
+                  router.push(`/user-profile/${item.id}`);
                   setLikesModalVisible(false);
                 }}
               >

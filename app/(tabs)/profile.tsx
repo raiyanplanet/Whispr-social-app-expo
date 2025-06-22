@@ -3,36 +3,36 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useFocusEffect } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-  Alert,
-  Dimensions,
-  FlatList,
-  Modal,
-  RefreshControl,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    Dimensions,
+    FlatList,
+    Modal,
+    RefreshControl,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemeToggle } from "../../components/ThemeToggle";
 import { useTheme } from "../../contexts/ThemeContext";
 import {
-  acceptFriendRequest,
-  checkIfUserLiked,
-  deletePost,
-  getCurrentUserProfile,
-  getFriendCount,
-  getFriends,
-  getPendingFriendRequests,
-  getPostCommentCount,
-  getPostLikes,
-  getUserPosts,
-  likePost,
-  rejectFriendRequest,
-  signOut,
-  unlikePost,
-  updateUserProfile,
+    acceptFriendRequest,
+    checkIfUserLiked,
+    deletePost,
+    getCurrentUserProfile,
+    getFriendCount,
+    getFriends,
+    getPendingFriendRequests,
+    getPostCommentCount,
+    getPostLikes,
+    getUserPosts,
+    likePost,
+    rejectFriendRequest,
+    signOut,
+    unlikePost,
+    updateUserProfile,
 } from "../../lib/supabase";
 
 const { width } = Dimensions.get("window");
@@ -889,7 +889,7 @@ export default function ProfileScreen() {
               <TouchableOpacity
                 style={{ backgroundColor: colors.surface, borderBottomColor: colors.border }}
                 className="flex-row items-center p-4 border-b"
-                onPress={() => router.push(`/user-profile?userId=${item.id}`)}>
+                onPress={() => router.push(`/user-profile/${item.id}`)}>
                 <View className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mr-3 flex items-center justify-center">
                   <Text className="text-white font-bold">
                     {item.username?.charAt(0).toUpperCase() || "U"}
