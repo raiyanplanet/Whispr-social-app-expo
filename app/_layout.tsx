@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 import { AuthProvider } from "../contexts/AuthContext";
 import { ThemeProvider, useTheme } from "../contexts/ThemeContext";
 import "../global.css";
@@ -24,8 +25,7 @@ function RootLayoutContent() {
           contentStyle: {
             backgroundColor: colors.background,
           },
-        }}
-      >
+        }}>
         <Stack.Screen
           name="index"
           options={{
@@ -45,6 +45,12 @@ function RootLayoutContent() {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="debug"
+          options={{
+            title: "Debug",
+          }}
+        />
       </Stack>
     </>
   );
@@ -52,10 +58,12 @@ function RootLayoutContent() {
 
 export default function RootLayout() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <RootLayoutContent />
-      </AuthProvider>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <AuthProvider>
+          <RootLayoutContent />
+        </AuthProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }

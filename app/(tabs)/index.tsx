@@ -117,11 +117,40 @@ export default function FeedScreen() {
     loadCurrentUser();
   }, []);
 
+  const checkForNewPosts = useCallback(async () => {
+    if (!lastPostId || checkingNewPosts) return;
+
+    try {
+      setCheckingNewPosts(true);
+      const { data, error } = await getPosts();
+
+      if (error) {
+        console.error("Error checking for new posts:", error);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        // Find how many posts are newer than our last known post
+        const lastPostIndex = data.findIndex((post) => post.id === lastPostId);
+        if (lastPostIndex > 0) {
+          setNewPostsCount(lastPostIndex);
+        } else if (lastPostIndex === -1 && data.length > 0) {
+          // If our last post is not found, all posts are new
+          setNewPostsCount(data.length);
+        }
+      }
+    } catch (error) {
+      console.error("Error checking for new posts:", error);
+    } finally {
+      setCheckingNewPosts(false);
+    }
+  }, [lastPostId, checkingNewPosts]);
+
   // Refresh posts when screen comes into focus (e.g., when returning from profile)
   useFocusEffect(
     useCallback(() => {
       checkForNewPosts();
-    }, [])
+    }, [checkForNewPosts])
   );
 
   const loadCurrentUser = async () => {
@@ -183,35 +212,6 @@ export default function FeedScreen() {
       Alert.alert("Error", "Failed to load posts");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const checkForNewPosts = async () => {
-    if (!lastPostId || checkingNewPosts) return;
-
-    try {
-      setCheckingNewPosts(true);
-      const { data, error } = await getPosts();
-
-      if (error) {
-        console.error("Error checking for new posts:", error);
-        return;
-      }
-
-      if (data && data.length > 0) {
-        // Find how many posts are newer than our last known post
-        const lastPostIndex = data.findIndex((post) => post.id === lastPostId);
-        if (lastPostIndex > 0) {
-          setNewPostsCount(lastPostIndex);
-        } else if (lastPostIndex === -1 && data.length > 0) {
-          // If our last post is not found, all posts are new
-          setNewPostsCount(data.length);
-        }
-      }
-    } catch (error) {
-      console.error("Error checking for new posts:", error);
-    } finally {
-      setCheckingNewPosts(false);
     }
   };
 

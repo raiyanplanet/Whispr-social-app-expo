@@ -9,7 +9,7 @@ export default function Index() {
   // Show loading screen while checking authentication
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff' }}>
         <ActivityIndicator size="large" color="#3b82f6" />
         <Text style={{ marginTop: 16, color: '#666' }}>Loading...</Text>
       </View>

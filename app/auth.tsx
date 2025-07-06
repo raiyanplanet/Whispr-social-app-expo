@@ -2,15 +2,15 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
-  Alert,
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "../contexts/ThemeContext";
@@ -78,15 +78,15 @@ export default function AuthScreen() {
           return;
         }
 
-        const { error } = await signUp(email, password, username);
-        if (error) {
-          Alert.alert("Error", error.message);
+        const { error: _error } = await signUp(email, password, username);
+        if (_error) {
+          Alert.alert("Error", _error.message);
         } else {
           Alert.alert("Success", "Account created! Please check your email to verify your account.");
           setIsLogin(true);
         }
       }
-    } catch (error) {
+    } catch (_error) {
       Alert.alert("Error", "Authentication failed");
     } finally {
       setLoading(false);

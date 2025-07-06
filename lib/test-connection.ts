@@ -1,54 +1,39 @@
 import { supabase } from './supabase';
 
 export const testSupabaseConnection = async () => {
-  console.log('Testing Supabase connection...');
-  
   try {
-    // Test 1: Check if we can connect to Supabase
-    console.log('Test 1: Checking connection...');
+    console.log('Testing Supabase connection...');
+    
+    // Test basic connection
     const { data, error } = await supabase.from('profiles').select('count').limit(1);
     
     if (error) {
-      console.error('Connection test failed:', error);
-      return { success: false, error: 'Cannot connect to database' };
+      console.error('Supabase connection test failed:', error);
+      return { success: false, error };
     }
     
-    console.log('✅ Connection successful');
-    
-    // Test 2: Check if profiles table exists
-    console.log('Test 2: Checking if profiles table exists...');
-    const { data: tableCheck, error: tableError } = await supabase
-      .from('profiles')
-      .select('*')
-      .limit(1);
-    
-    if (tableError) {
-      console.error('Table check failed:', tableError);
-      return { success: false, error: 'Profiles table does not exist' };
-    }
-    
-    console.log('✅ Profiles table exists');
-    
-    // Test 3: Check RLS policies
-    console.log('Test 3: Checking RLS policies...');
-    const { data: policyCheck, error: policyError } = await supabase
-      .from('profiles')
-      .select('*')
-      .limit(1);
-    
-    if (policyError) {
-      console.error('Policy check failed:', policyError);
-      return { success: false, error: 'RLS policies not configured properly' };
-    }
-    
-    console.log('✅ RLS policies working');
-    
-    return { success: true, message: 'All tests passed' };
-    
+    console.log('Supabase connection test successful');
+    return { success: true, data };
   } catch (error) {
-    console.error('Test failed with exception:', error);
-    return { success: false, error: 'Test failed with exception' };
+    console.error('Exception during Supabase connection test:', error);
+    return { success: false, error };
   }
+};
+
+export const testEnvironmentVariables = () => {
+  const url = process.env.EXPO_PUBLIC_SUPABASE_URL;
+  const key = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+  
+  console.log('Environment variables check:', {
+    url: url ? `${url.substring(0, 20)}...` : 'missing',
+    key: key ? `${key.substring(0, 20)}...` : 'missing'
+  });
+  
+  return {
+    urlPresent: !!url,
+    keyPresent: !!key,
+    bothPresent: !!(url && key)
+  };
 };
 
 export const testUserCreation = async (email: string, password: string, username: string) => {

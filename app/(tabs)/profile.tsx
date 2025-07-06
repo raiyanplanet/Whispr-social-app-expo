@@ -4,7 +4,6 @@ import { router, useFocusEffect } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import {
     Alert,
-    Dimensions,
     FlatList,
     Modal,
     RefreshControl,
@@ -12,7 +11,7 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    View,
+    View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemeToggle } from "../../components/ThemeToggle";
@@ -35,7 +34,7 @@ import {
     updateUserProfile,
 } from "../../lib/supabase";
 
-const { width } = Dimensions.get("window");
+// const { } = Dimensions.get("window");
 
 // Storage keys for caching
 const STORAGE_KEYS = {
@@ -155,7 +154,7 @@ export default function ProfileScreen() {
     }
   };
 
-  const loadUserData = async (forceRefresh = false) => {
+  const loadUserData = useCallback(async (forceRefresh = false) => {
     try {
       setLoading(true);
 
@@ -226,7 +225,7 @@ export default function ProfileScreen() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const loadUserPosts = async (userId: string) => {
     try {
@@ -266,14 +265,14 @@ export default function ProfileScreen() {
 
   useEffect(() => {
     loadUserData();
-  }, []);
+  }, [loadUserData]);
 
   // Refresh data when screen comes into focus (e.g., when returning from profile)
   useFocusEffect(
     useCallback(() => {
       // Only refresh if cache is invalid
       loadUserData();
-    }, [])
+    }, [loadUserData])
   );
 
   const onRefresh = async () => {
